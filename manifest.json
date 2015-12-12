@@ -1,12 +1,12 @@
 {
-  "name": "Appspector",
+  "name": "Is It Flywheel",
   "manifest_version": 2,
 	"icons": {
 		"48": "icon48.png",
 		"128": "icon128.png"
 	},
-	"version": "0.3.2",
-	"description": "Detect web applications and javascript libraries run on browsing website.",
+	"version": "1.0",
+	"description": "Detect web applications is hosted on Flywheel or some other host.",
 	"background": {
     "page": "background.html"
   },

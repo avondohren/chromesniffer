@@ -26,7 +26,8 @@ var knownHeaders = {
   'server': {
     'Apache': /Apache\/?(.*)/,
     'nginx': /nginx\/?(.*)/,
-    'IIS': /Microsoft-IIS\/?(.*)/
+    'IIS': /Microsoft-IIS\/?(.*)/,
+    'Flywheel': /Flywheel\/?(.*)/
   },
   'via': {
     'Varnish': /(.*) varnish/
@@ -126,5 +127,3 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     sendResponse(apps);
   }
 });
-
-
