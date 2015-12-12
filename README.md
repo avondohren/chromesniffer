@@ -9,6 +9,11 @@ Also shows the WordPress version and any other services that can be determined b
 Installation
 ------------
 
-In Chrome, choose Window > Extensions.  Drag isItFlywheel.crx into the page that appears.
+Download the file using the direct download link above.  
+Go to [Chrome Extensions](chrome://extensions) page.
+Drag isItFlywheel.crx into the page that appears.
+
+Credits
+-------
 
 Forked and simplified from https://github.com/nqbao/chromesniffer
