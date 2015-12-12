@@ -10,7 +10,7 @@ Installation
 ------------
 
 Download the file using the direct download link above.  
-Go to [Chrome Extensions](chrome://extensions) page.
+Open Chrome's extentions page by typing **chrome://extensions** into Chrome's address bar.  
 Drag isItFlywheel.crx into the page that appears.
 
 Credits
