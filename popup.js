@@ -14,6 +14,7 @@ chrome.tabs.getSelected(null,function(tab){
 
 			if (!app.title) app.title = appid;
 			if (!app.url) app.url = appinfo[''].url;
+			// if (appid[hash]) app.url = "https://app.getflywheel.com/admin/sites/?q="+app.hash;
 			if (!app.icon) app.icon = appinfo[''].icon;
 			if( apps[appid] != "-1") app.title = appid + ' ' + apps[appid];
 

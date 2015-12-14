@@ -24,6 +24,19 @@
     }
   }
 
+  var text = document.documentElement.outerHTML;
+  var text_tests = {
+    'Tumblr': /<iframe src=("|')http:\/\/\S+\.tumblr\.com/i,
+    'WordPress': /<link rel=("|')stylesheet("|') [^>]+wp-content/i
+  };
+
+  for (var t in text_tests) {
+    if (t in apps) continue;
+    if (text_tests[t].test(text)) {
+      apps[t] = -1;
+    }
+  }
+
   var meta = document.getElementById('is_it_flywheel_data');
   meta.content = JSON.stringify(apps);
 

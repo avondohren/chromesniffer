@@ -3,7 +3,7 @@
 var appinfo = {
   'Flywheel': {
     icon: 'flywheel.ico',
-    url: 'http://app.getflywheel.com',
+    url: 'https://app.getflywheel.com/admin/sites',
     priority: 0.9
   },
   'WordPress': {
