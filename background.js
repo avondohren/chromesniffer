@@ -1,27 +1,11 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: buihoangvu
- * Date: 10/4/13
- * Time: 3:28 PM
- * To change this template use File | Settings | File Templates.
- */
-
-window.dd = function(msg)
-{
-  console.log(msg);
-};
+// Is It Flywheel - Background
 
 var tabinfo = {};
 
-// initial list of header detection.  will move this to a separate file later.
 var knownHeaders = {
   'x-powered-by': {
-    // 'Ruby on Rails': /Phusion Passenger/,
-    'Express.js': /Express/,
     'PHP': /PHP\/?(.*)/,
-    'Dinkly': /DINKLY\/?(.*)/,
-    'ASP.NET': /ASP\.NET/,
-    'Nette': /Nette Framework/
+    'ASP.NET': /ASP\.NET/
   },
   'server': {
     'Apache': /Apache\/?(.*)/,
@@ -34,34 +18,23 @@ var knownHeaders = {
   }
 };
 
-// Scans through the headers finding matches, and returning the val from appinfo (apps.js)
 var headerDetector = function (headers) {
   var appsFound = [];
-
-  // loop through all the headers received
   for (var i = headers.length - 1; i >= 0; i--) {
     var apps = knownHeaders[headers[i].name.toLowerCase()];
-    if (!apps) {
-      continue;
-    }
+    if (!apps) continue;
     for (var app in apps) {
       var matches = headers[i].value.match(apps[app]);
-      if (matches) {
-        var version = matches[1] || -1;
-        appsFound[app] = version;
-      }
+      if (matches) appsFound[app] = matches[1] || -1;
     }
   }
-
   return appsFound;
 };
 
-// collect apps from header information:
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
-    var appsFound = headerDetector(details.responseHeaders);
     tabinfo[details.tabId] = tabinfo[details.tabId] || {};
-    tabinfo[details.tabId]['headers'] = appsFound;
+    tabinfo[details.tabId]['headers'] = headerDetector(details.responseHeaders);
   },
   {
     urls: ['<all_urls>'],
@@ -72,7 +45,6 @@ chrome.webRequest.onHeadersReceived.addListener(
 
 
 chrome.tabs.onRemoved.addListener(function (tabId) {
-  // free memory
   delete tabinfo[tabId];
 });
 
@@ -82,14 +54,12 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     var thisTab = tabinfo[sender.tab.id];
     thisTab['apps'] = request.apps;
 
-    // load in any apps we discovered from headers:
     for (var header in thisTab['headers']) {
       thisTab['apps'][header] = thisTab['headers'][header];
     }
 
     // change the tab icon
     var mainApp = null;
-
     for (var app in request.apps) {
       if (mainApp === null) {
         mainApp = app;
@@ -97,23 +67,15 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
       }
 
       if (appinfo[app].priority) {
-        if (!appinfo[mainApp].priority) {
-          mainApp = app;
-        }
-        else if (appinfo[mainApp].priority > appinfo[app].priority) {
-          mainApp = app;
-        }
+        if (!appinfo[mainApp].priority) mainApp = app;
+        else if (appinfo[mainApp].priority > appinfo[app].priority) mainApp = app;
       }
     }
 
     var mainAppInfo = appinfo[mainApp];
-    if (mainAppInfo) { // lazy bug
+    if (mainAppInfo) {
       var appTitle = mainAppInfo.title ? mainAppInfo.title : mainApp;
-
-      if (request.apps[mainApp] != "-1") {
-        appTitle = mainApp + ' ' + request.apps[mainApp];
-      }
-
+      if (request.apps[mainApp] != "-1") appTitle = mainApp + ' ' + request.apps[mainApp];
       chrome.pageAction.setIcon({tabId: sender.tab.id, path: 'apps/' + mainAppInfo.icon});
       chrome.pageAction.setTitle({tabId: sender.tab.id, title: appTitle});
     }
